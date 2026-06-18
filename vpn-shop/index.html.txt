@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VPN Shop</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #1e1e2e;
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        .container {
+            max-width: 400px;
+            width: 100%;
+            background: #2a2a3e;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            text-align: center;
+        }
+        h1 { margin-top: 0; font-size: 24px; }
+        .tariff {
+            background: #3a3a5a;
+            border-radius: 16px;
+            padding: 15px;
+            margin: 15px 0;
+            cursor: pointer;
+            transition: 0.2s;
+            border: 2px solid transparent;
+        }
+        .tariff:hover {
+            border-color: #5b7cfa;
+            background: #44446a;
+        }
+        .tariff h2 { margin: 0; font-size: 20px; }
+        .tariff p { margin: 5px 0 0; opacity: 0.7; }
+        .price { font-size: 26px; font-weight: bold; color: #f0c040; }
+        .stars { font-size: 14px; opacity: 0.6; }
+        #status { margin-top: 20px; font-size: 14px; color: #8f8fbf; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🌟 Выбери тариф</h1>
+        <div class="tariff" data-tariff="month">
+            <h2>1 месяц</h2>
+            <p>Отличный старт</p>
+            <div class="price">10 ⭐</div>
+        </div>
+        <div class="tariff" data-tariff="quarter">
+            <h2>3 месяца</h2>
+            <p>Экономия 15%</p>
+            <div class="price">25 ⭐</div>
+        </div>
+        <div class="tariff" data-tariff="year">
+            <h2>12 месяцев</h2>
+            <p>Максимальная выгода</p>
+            <div class="price">80 ⭐</div>
+        </div>
+        <div id="status">Нажми на тариф, чтобы оплатить</div>
+    </div>
+
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <script>
+        // Инициализируем WebApp
+        const tg = window.Telegram.WebApp;
+        tg.expand(); // растягиваем на всю высоту
+
+        // Обработчики кликов по тарифам
+        document.querySelectorAll('.tariff').forEach(el => {
+            el.addEventListener('click', function() {
+                const tariff = this.dataset.tariff;
+                // Отправляем данные в бота
+                tg.sendData(JSON.stringify({ tariff: tariff }));
+                document.getElementById('status').textContent = '⏳ Отправляем запрос...';
+                // Закрываем WebApp после отправки (можно через секунду)
+                setTimeout(() => tg.close(), 1000);
+            });
+        });
+    </script>
+</body>
+</html>
